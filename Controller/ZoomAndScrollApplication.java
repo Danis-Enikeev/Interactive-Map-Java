@@ -59,9 +59,9 @@ public class ZoomAndScrollApplication extends Application {
     public void start(Stage stage) {
         GUIStage = stage;
         Config config = new Config("config");
-        for (HashMap.Entry<String, String> pair : Config.getSettings().entrySet()) {
+        /*for (HashMap.Entry<String, String> pair : Config.getSettings().entrySet()) {
             System.out.println(pair.getKey() + " : " + pair.getValue());
-        }
+        }*/
         stage.setTitle("Login page");
 
         //mapScene();

@@ -75,7 +75,7 @@ public class PannableCanvas extends Pane {
                     float g = rand.nextFloat();
                     float b = rand.nextFloat();
                     float o = rand.nextFloat();
-                    colorCode = toInt(Color.color(r, g, b, o));
+                    colorCode = toInt(Color.color(r, g, b, 0.4));
                 }
                 else {
 
@@ -98,7 +98,7 @@ public class PannableCanvas extends Pane {
 
     private int toInt(Color c) {
         return
-                ((int) (c.getOpacity() * 255) << 24) |
+                ( (int)(c.getOpacity()*255 ) << 24) |
                         ((int) (c.getRed() * 255) << 16) |
                         ((int) (c.getGreen() * 255) << 8) |
                         ((int) (c.getBlue() * 255));

@@ -58,7 +58,7 @@ public class LoginScreen extends GridPane {
                 } else {
                     config.Write("Developer mode", "0");
                 }
-                if (Config.getSettings().get("Developer mode").equals("1")) {
+                if (Config.getSettings().get("Developer mode").equals("0")) {
                     try {
                         File file = new File("err");
                         FileOutputStream fos = new FileOutputStream(file);
