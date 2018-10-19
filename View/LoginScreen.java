@@ -11,15 +11,14 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import static Controller.ZoomAndScrollApplication.mapScene;
 
 public class LoginScreen extends GridPane {
 
@@ -29,7 +28,6 @@ public class LoginScreen extends GridPane {
         setVgap(10);
         setPadding(new Insets(25, 25, 25, 25));
         Text scenetitle = new Text("Welcome");
-        scenetitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
         add(scenetitle, 0, 0, 2, 1);
 
         Label userName = new Label("User Name:");
@@ -55,12 +53,12 @@ public class LoginScreen extends GridPane {
 
             @Override
             public void handle(ActionEvent e) {
-                if (config.getSettings().get("Login").equals(userTextField.getText()) && config.getSettings().get("Password").equals(pwBox.getText())) {
+                if (Config.getSettings().get("Login").equals(userTextField.getText()) && Config.getSettings().get("Password").equals(pwBox.getText())) {
                     config.Write("Developer mode", "1");
                 } else {
                     config.Write("Developer mode", "0");
                 }
-                if (config.getSettings().get("Developer mode").equals("0")) {
+                if (Config.getSettings().get("Developer mode").equals("1")) {
                     try {
                         File file = new File("err");
                         FileOutputStream fos = new FileOutputStream(file);
@@ -71,6 +69,7 @@ public class LoginScreen extends GridPane {
                     }
                 }
                 getScene().getWindow().hide();
+                mapScene();
             }
         });
 

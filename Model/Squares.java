@@ -12,8 +12,28 @@ public class Squares {
     private Square[][] squares2 = new Square[256][512];
     private Square[][] squares3 = new Square[128][256];
     private Square[][] squares4 = new Square[64][128];
-
     private Date date;
+
+
+    public Square[][] getSquares(int size) {
+        switch (size){
+            case 2048: return squares0;
+            case 1024: return squares1;
+            case 512: return squares2;
+            case 256: return squares3;
+            case 128: return squares4;
+            default:
+                System.err.println("Error: wrong square size");
+                return squares4;
+        }
+    }
+
+
+    public Date getDate() {
+        return date;
+    }
+
+
 
     private void SqInit() { // метод инициализируещий все массивы squares(i)
         for (int i = 0; i < 1024; i++)

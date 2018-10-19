@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class Config {
     private File file;
     private BufferedReader br;
-    private HashMap<String, String> settings;
+    static private HashMap<String, String> settings;
     private BufferedWriter bw;
 
     public Config(String path) {
@@ -45,7 +45,7 @@ public class Config {
         }
     }
 
-    public HashMap<String, String> getSettings() {
+    static public HashMap<String, String> getSettings() {
         return settings;
     }
 

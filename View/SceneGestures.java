@@ -76,10 +76,10 @@ public class SceneGestures {
                 }
             }
 
-            scale = clamp(scale, MIN_SCALE, MAX_SCALE);
+          //  scale = clamp(scale, MIN_SCALE, MAX_SCALE);
             double f = (scale / oldScale) - 1;
             double dx = (event.getSceneX() - (canvas.getBoundsInParent().getWidth() / 2 + canvas.getBoundsInParent().getMinX()));
-            double dy = (event.getSceneY() - (canvas.getBoundsInParent().getHeight() / 2 + canvas.getBoundsInParent().getMinY()));
+            double dy = (event.getSceneY() - (canvas.getBoundsInParent().getHeight() / 2  + canvas.getBoundsInParent().getMinY()));
             canvas.setScale(scale);
             canvas.setPivot(f * dx, f * dy);
             event.consume();
@@ -89,7 +89,7 @@ public class SceneGestures {
     };
 
 
-    public static double clamp(double value, double min, double max) {
+   /*public static double clamp(double value, double min, double max) {
 
         if (Double.compare(value, min) < 0)
             return min;
@@ -99,4 +99,5 @@ public class SceneGestures {
 
         return value;
     }
+    */
 }
