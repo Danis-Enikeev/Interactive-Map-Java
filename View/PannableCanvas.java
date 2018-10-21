@@ -29,26 +29,24 @@ public class PannableCanvas extends Pane {
     private final WritablePixelFormat<IntBuffer> pixelFormat = PixelFormat.getIntArgbPreInstance();
     private ArrayList<Squares> squaresList;
     public PannableCanvas() {
+        setPrefSize(width, height);
         if (Config.getSettings().get("Autotests").equals("0")) {
             this.squaresList = ZoomAndScrollApplication.setSquares();
         }
-        //setStyle("-fx-background-color: lightgrey; -fx-border-color: blue;");
-
-        setMinWidth(2048*2);
-        setMinHeight(2048);
-        double test =  getStage().getHeight();
+        setStyle("-fx-background-color: white; -fx-border-color: blue;");
         scaleXProperty().bind(myScale);
         scaleYProperty().bind(myScale);
+        Image image = new Image(new File("View/map.png").toURI().toString());
+        ImageView imageView = new ImageView(image);
+        getChildren().add(imageView);
 
     }
 
 
     public void ResizeGrid(double resizeVal) {
-
-        getChildren().clear();
-        Image image = new Image(new File("View/map.png").toURI().toString());
-        ImageView imageView = new ImageView(image);
-        getChildren().add(imageView);
+        try {
+            getChildren().remove(1);
+        }catch (Exception e){}
         int w = width;
         int h = height;
         GridVal *= resizeVal;

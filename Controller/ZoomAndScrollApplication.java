@@ -43,15 +43,20 @@ public class ZoomAndScrollApplication extends Application {
     }
 
     public static void mapScene(){
+        Group group = new Group();
+
         PannableCanvas canvas = new PannableCanvas();
-        Scene scene = new Scene(canvas, 2048, 1024);
+        group.getChildren().add(canvas);
+
+        Scene scene = new Scene(group, 1280, 720);
+
         SceneGestures sceneGestures = new SceneGestures(canvas);
         scene.addEventFilter(MouseEvent.MOUSE_PRESSED, sceneGestures.getOnMousePressedEventHandler());
         scene.addEventFilter(MouseEvent.MOUSE_DRAGGED, sceneGestures.getOnMouseDraggedEventHandler());
         scene.addEventFilter(ScrollEvent.ANY, sceneGestures.getOnScrollEventHandler());
         getStage().setScene(scene);
         getStage().show();
-
+        getStage().setFullScreen(true);
         canvas.ResizeGrid(1);
     }
 
@@ -59,12 +64,7 @@ public class ZoomAndScrollApplication extends Application {
     public void start(Stage stage) {
         GUIStage = stage;
         Config config = new Config("config");
-        /*for (HashMap.Entry<String, String> pair : Config.getSettings().entrySet()) {
-            System.out.println(pair.getKey() + " : " + pair.getValue());
-        }*/
         stage.setTitle("Login page");
-
-        //mapScene();
 
         LoginScreen loginScreen = new LoginScreen(config);
         Scene scene = new Scene(loginScreen, 300, 275);
