@@ -6,8 +6,6 @@ import javafx.scene.input.ScrollEvent;
 
 public class SceneGestures {
 
-    //private static final double MAX_SCALE = 10.0d;
-    //private static final double MIN_SCALE = .1d;
 
     PannableCanvas canvas;
     private DragContext sceneDragContext = new DragContext();
@@ -56,7 +54,6 @@ public class SceneGestures {
                 }
             }
 
-            //  scale = clamp(scale, MIN_SCALE, MAX_SCALE);
             double f = (scale / oldScale) - 1;
             double dx = (event.getSceneX() - (canvas.getBoundsInParent().getWidth() / 2 + canvas.getBoundsInParent().getMinX()));
             double dy = (event.getSceneY() - (canvas.getBoundsInParent().getHeight() / 2 + canvas.getBoundsInParent().getMinY()));
@@ -85,15 +82,4 @@ public class SceneGestures {
     }
 
 
-   /*public static double clamp(double value, double min, double max) {
-
-        if (Double.compare(value, min) < 0)
-            return min;
-
-        if (Double.compare(value, max) > 0)
-            return max;
-
-        return value;
-    }
-    */
 }

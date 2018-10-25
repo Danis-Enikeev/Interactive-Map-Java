@@ -53,18 +53,12 @@ public class MapPreloader extends Application {
         group.getChildren().add(p);
         preloaderStage.setScene(new Scene(group, 300, 150));
         preloaderStage.show();
-//        Thread th = new Thread (()->{
-//            init();
-//        });
-//        th.setDaemon(true);
-//        th.start();
 
         Task<Boolean> task = new Task<Boolean>() {
             @Override
             public Boolean call() {
-                // process long-running computation, data retrieval, etc...
 
-                Boolean result = mapCompute(); // result of computation
+                Boolean result = mapCompute();
                 return result;
             }
         };
