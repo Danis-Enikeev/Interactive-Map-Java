@@ -18,44 +18,6 @@ public class Squares {
     private Date date;
 
 
-    public Square[][] getSquares(int size) {
-        switch (size){
-            case 2048: return squares0;
-            case 1024: return squares1;
-            case 512: return squares2;
-            case 256: return squares3;
-            case 128: return squares4;
-            default:
-                System.err.println("Error: wrong square size");
-                return squares4;
-        }
-    }
-
-
-    public Date getDate() {
-        return date;
-    }
-
-
-
-    private void SqInit() { // метод инициализируещий все массивы squares(i)
-        for (int i = 0; i < 1024; i++)
-            for (int j = 0; j < 2048; j++)
-                this.squares0[i][j] = new Square(new Position(j * 2, i * 2), new Position(j * 2 + 2, i * 2 + 2));// сразу присваиваем всем элементам координаты
-        for (int i = 0; i < 512; i++)
-            for (int j = 0; j < 1024; j++)
-                this.squares1[i][j] = new Square(new Position(j * 4, i * 4), new Position(j * 4 + 4, i * 4 + 4));
-        for (int i = 0; i < 256; i++)
-            for (int j = 0; j < 512; j++)
-                this.squares2[i][j] = new Square(new Position(j * 8, i * 8), new Position(j * 8 + 8, i * 8 + 8));
-        for (int i = 0; i < 128; i++)
-            for (int j = 0; j < 256; j++)
-                this.squares3[i][j] = new Square(new Position(j * 16, i * 16), new Position(j * 16 + 16, i * 16 + 16));
-        for (int i = 0; i < 64; i++)
-            for (int j = 0; j < 128; j++)
-                this.squares3[i][j] = new Square(new Position(j * 32, i * 32), new Position(j * 32 + 32, i * 32 + 32));
-    }
-
     public Squares(File file) {
         SqInit(); // инициализируем массивы
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM yyyy"); // указываем формат даты
@@ -128,5 +90,45 @@ public class Squares {
                 bufSq[1][1] = squares3[i + 1][j + 1];
                 squares4[i / 2][j / 2] = new Square(bufSq);
             }
+    }
+
+    public Square[][] getSquares(int size) {
+        switch (size) {
+            case 2048:
+                return squares0;
+            case 1024:
+                return squares1;
+            case 512:
+                return squares2;
+            case 256:
+                return squares3;
+            case 128:
+                return squares4;
+            default:
+                System.err.println("Error: wrong square size");
+                return squares4;
+        }
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    private void SqInit() { // метод инициализируещий все массивы squares(i)
+        for (int i = 0; i < 1024; i++)
+            for (int j = 0; j < 2048; j++)
+                this.squares0[i][j] = new Square(new Position(j * 2, i * 2), new Position(j * 2 + 2, i * 2 + 2));// сразу присваиваем всем элементам координаты
+        for (int i = 0; i < 512; i++)
+            for (int j = 0; j < 1024; j++)
+                this.squares1[i][j] = new Square(new Position(j * 4, i * 4), new Position(j * 4 + 4, i * 4 + 4));
+        for (int i = 0; i < 256; i++)
+            for (int j = 0; j < 512; j++)
+                this.squares2[i][j] = new Square(new Position(j * 8, i * 8), new Position(j * 8 + 8, i * 8 + 8));
+        for (int i = 0; i < 128; i++)
+            for (int j = 0; j < 256; j++)
+                this.squares3[i][j] = new Square(new Position(j * 16, i * 16), new Position(j * 16 + 16, i * 16 + 16));
+        for (int i = 0; i < 64; i++)
+            for (int j = 0; j < 128; j++)
+                this.squares3[i][j] = new Square(new Position(j * 32, i * 32), new Position(j * 32 + 32, i * 32 + 32));
     }
 }

@@ -11,14 +11,14 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import static Controller.ZoomAndScrollApplication.mapScene;
+
+import static Controller.ZoomAndScrollApplication.getStage;
 
 public class LoginScreen extends GridPane {
 
@@ -68,8 +68,12 @@ public class LoginScreen extends GridPane {
                         System.err.println("Error opening error log file");
                     }
                 }
-                getScene().getWindow().hide();
-                mapScene();
+
+
+                getStage().hide();
+                MapPreloader preloader = new MapPreloader();
+                preloader.start(getStage());
+
             }
         });
 

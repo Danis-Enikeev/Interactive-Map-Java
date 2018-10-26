@@ -4,9 +4,9 @@ import java.io.*;
 import java.util.HashMap;
 
 public class Config {
+    static private HashMap<String, String> settings;
     private File file;
     private BufferedReader br;
-    static private HashMap<String, String> settings;
     private BufferedWriter bw;
 
     public Config(String path) {
