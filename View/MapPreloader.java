@@ -4,6 +4,7 @@ import Controller.Config;
 import Model.Square;
 import Model.Squares;
 import javafx.application.Application;
+import javafx.application.Preloader;
 import javafx.concurrent.Task;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
-public class MapPreloader extends Application {
+public class MapPreloader extends Preloader {
     private static ArrayList<Squares> squaresList = new ArrayList<>(0);
     private final WritablePixelFormat<IntBuffer> pixelFormat = PixelFormat.getIntArgbPreInstance();
     private int w = 1024 * 4;
@@ -27,17 +28,24 @@ public class MapPreloader extends Application {
     private ArrayList<ArrayList<ImageView>> mapImageList;
     private Stage preloaderStage;
 
-    public ArrayList<Squares> setSquares() {
+    public void setSquares() {
         File folder = new File("Data");
         File[] listOfFiles = folder.listFiles();
+        Squares squares;
+        int offset = 2;
         try {
             for (File file : listOfFiles) {
-                squaresList.add(new Squares(file));
+                squares = new Squares(file);
+                ArrayList<ImageView> mapImageListBuff = new ArrayList<>(0);
+                for (int i = offset; i <= 32; i *= 2) {
+                    mapImageListBuff.add(getMap(squares, i));
+                }
+                mapImageList.add(mapImageListBuff);
+
             }
         } catch (java.lang.NullPointerException e) {
             System.err.println("Error no files found in Data directory");
         }
-        return squaresList;
     }
 
     @Override
@@ -45,13 +53,13 @@ public class MapPreloader extends Application {
 
 
         this.preloaderStage = primaryStage;
-        Group group = new Group();
         ProgressBar bar = new ProgressBar();
         BorderPane p = new BorderPane();
-
         p.setCenter(bar);
-        group.getChildren().add(p);
-        preloaderStage.setScene(new Scene(group, 300, 150));
+
+        preloaderStage.setScene(new Scene(p, 300, 150));
+        preloaderStage.setTitle("Please wait...");
+
         preloaderStage.show();
 
         Task<Boolean> task = new Task<Boolean>() {
@@ -89,19 +97,10 @@ public class MapPreloader extends Application {
     public Boolean mapCompute() {
         mapImageList = new ArrayList<>(0);
         if (Config.getSettings().get("Autotests").equals("0")) {
-            ArrayList<ImageView> mapImageListBuff = new ArrayList<>(0);
-
             setSquares();
-            int offset = 2;
-            for (Squares squares : squaresList) {
-                for (int i = offset; i <= 32; i *= 2) {
-                    mapImageListBuff.add(getMap(squares, i));
-                }
-                mapImageList.add(mapImageListBuff);
-            }
         } else {
             int offset = 2;
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 10; i++) {
                 ArrayList<ImageView> mapImageListBuff = new ArrayList<>(0);
 
                 for (int j = offset; j <= 32; j *= 2) {
@@ -112,7 +111,6 @@ public class MapPreloader extends Application {
 
         }
         return Boolean.TRUE;
-
     }
 
     private int toInt(Square s) {

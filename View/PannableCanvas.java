@@ -30,7 +30,7 @@ public class PannableCanvas extends Pane {
     }
 
 
-    public void ResizeGrid(int resizeVal) {
+    public void ResizeGrid(int resizeVal, int timeVal) {
 
 
         getChildren().clear();
@@ -38,7 +38,7 @@ public class PannableCanvas extends Pane {
 
         GridVal += resizeVal;
 
-        getChildren().add(mapImageList.get(0).get(3 + GridVal));
+        getChildren().add(mapImageList.get(timeVal).get(3 + GridVal));
 
     }
 

@@ -1,6 +1,7 @@
 package View;
 
 import javafx.event.EventHandler;
+import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 
@@ -8,6 +9,7 @@ public class SceneGestures {
 
 
     PannableCanvas canvas;
+    Slider slider;
     private DragContext sceneDragContext = new DragContext();
     private EventHandler<MouseEvent> onMousePressedEventHandler = new EventHandler<MouseEvent>() {
 
@@ -23,10 +25,15 @@ public class SceneGestures {
     };
     private EventHandler<MouseEvent> onMouseDraggedEventHandler = new EventHandler<MouseEvent>() {
         public void handle(MouseEvent event) {
-            canvas.setTranslateX(sceneDragContext.translateAnchorX + event.getSceneX() - sceneDragContext.mouseAnchorX);
-            canvas.setTranslateY(sceneDragContext.translateAnchorY + event.getSceneY() - sceneDragContext.mouseAnchorY);
 
-            event.consume();
+            if (event.getSceneX() > 150 || event.getSceneY() > 50) {
+                canvas.setTranslateX(sceneDragContext.translateAnchorX + event.getSceneX() - sceneDragContext.mouseAnchorX);
+                canvas.setTranslateY(sceneDragContext.translateAnchorY + event.getSceneY() - sceneDragContext.mouseAnchorY);
+
+            } else {
+                canvas.ResizeGrid(0, (int) slider.getValue());
+            }
+            // event.consume();
         }
     };
     /**
@@ -45,12 +52,12 @@ public class SceneGestures {
             if (event.getDeltaY() < 0 && oldScale != 1.0 * 0.5) {
                 resizeval = 1;
                 scale /= delta;
-                canvas.ResizeGrid(resizeval);
+                canvas.ResizeGrid(resizeval, (int) slider.getValue());
             } else {
                 if (event.getDeltaY() >= 0 && oldScale != 8.0) {
                     resizeval = -1;
                     scale *= delta;
-                    canvas.ResizeGrid(resizeval);
+                    canvas.ResizeGrid(resizeval, (int) slider.getValue());
                 }
             }
 
@@ -65,7 +72,9 @@ public class SceneGestures {
 
     };
 
-    public SceneGestures(PannableCanvas canvas) {
+    public SceneGestures(PannableCanvas canvas, Slider slider) {
+
+        this.slider = slider;
         this.canvas = canvas;
     }
 
