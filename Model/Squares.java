@@ -1,5 +1,12 @@
 package Model;
 
+import com.sun.imageio.plugins.png.PNGImageReader;
+import com.sun.imageio.plugins.png.PNGImageReaderSpi;
+
+import javax.imageio.ImageReadParam;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.FileImageInputStream;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -16,9 +23,19 @@ public class Squares {
     private Square[][] squares3 = new Square[128][256];
     private Square[][] squares4 = new Square[64][128];
     private Date date;
-
+    private int[] pixels;
+    private int height;
+    private int width;
 
     public Squares(File file) {
+        try {
+
+            readImageFromFile("View/map.png"); //считали файл карты и разобрали на пиксели
+
+        } catch (IOException e) {
+            System.err.println("Error reading map file");
+        }
+
         SqInit(); // инициализируем массивы
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM yyyy"); // указываем формат даты
         String mainBuf; // строка в которую постоянно будем загружать посторчно данные из файла
@@ -48,7 +65,10 @@ public class Squares {
                     bufArMar.add(new Marker(bufMar));
                 }
                 buf = new MeasModel(new Position(bufPos), bufArMar);
-                squares0[bufPos.getY() / 4][bufPos.getX() / 4].AddMeasModel(buf);
+                //Валидация маркера по карте
+                if (pixels[bufPos.getY() * width + bufPos.getX()] != 0xffffff && pixels[bufPos.getY() * width + bufPos.getX()] != 0x000000) {
+                    squares0[bufPos.getY() / 4][bufPos.getX() / 4].AddMeasModel(buf);
+                }
                 bufArMar = new ArrayList<Marker>(0);
 
             }
@@ -130,5 +150,24 @@ public class Squares {
         for (int i = 0; i < 64; i++)
             for (int j = 0; j < 128; j++)
                 this.squares3[i][j] = new Square(new Position(j * 32, i * 32), new Position(j * 32 + 32, i * 32 + 32));
+    }
+
+    private void readImageFromFile(String fileName) throws IOException {
+
+        ImageReader r = new PNGImageReader(new PNGImageReaderSpi());
+        r.setInput(new FileImageInputStream(new File(fileName)));
+        BufferedImage bi = r.read(0, new ImageReadParam());
+        ((FileImageInputStream) r.getInput()).close();
+
+
+        this.height = bi.getHeight();
+        this.width = bi.getWidth();
+
+        this.pixels = new int[height * width];
+        for (int i = 0; i < height; i++)
+            for (int j = 0; j < width; j++)
+                pixels[i * width + j] = bi.getRGB(j, i) & 0xFFFFFF; // 0xFFFFFF: записываем только 3 младших байта RGB
+
+
     }
 }
