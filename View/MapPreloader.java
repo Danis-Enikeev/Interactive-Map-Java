@@ -1,12 +1,11 @@
 package View;
 
 import Controller.Config;
+import Controller.FileQueue;
 import Model.Square;
 import Model.Squares;
-import javafx.application.Application;
 import javafx.application.Preloader;
 import javafx.concurrent.Task;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.*;
@@ -22,30 +21,40 @@ import java.util.Random;
 
 public class MapPreloader extends Preloader {
     private static ArrayList<Squares> squaresList = new ArrayList<>(0);
-    private final WritablePixelFormat<IntBuffer> pixelFormat = PixelFormat.getIntArgbPreInstance();
-    private int w = 1024 * 4;
-    private int h = 1024 * 2;
+    private static final WritablePixelFormat<IntBuffer> pixelFormat = PixelFormat.getIntArgbPreInstance();
+    private static int w = 1024 * 4;
+    private static int h = 1024 * 2;
     private ArrayList<ArrayList<ImageView>> mapImageList;
     private Stage preloaderStage;
+    private File[] listOfFiles;
+    private ArrayList<ArrayList<ImageView>> mapImageList1;
+
 
     public void setSquares() {
         File folder = new File("Data");
-        File[] listOfFiles = folder.listFiles();
-        Squares squares;
-        int offset = 2;
-        try {
-            for (File file : listOfFiles) {
-                squares = new Squares(file);
-                ArrayList<ImageView> mapImageListBuff = new ArrayList<>(0);
-                for (int i = offset; i <= 32; i *= 2) {
-                    mapImageListBuff.add(getMap(squares, i));
-                }
-                mapImageList.add(mapImageListBuff);
+        listOfFiles = folder.listFiles();
 
+        if (listOfFiles.length >= 2) {
+            mapImageList = new ArrayList<ArrayList<ImageView>>(listOfFiles.length / 2);
+            mapImageList1 = new ArrayList<ArrayList<ImageView>>(listOfFiles.length - listOfFiles.length / 2);
+
+            FileQueue fileTask1 = new FileQueue(0, listOfFiles.length / 2 - 1, mapImageList, listOfFiles);
+            FileQueue fileTask2 = new FileQueue(listOfFiles.length / 2, listOfFiles.length - 1, mapImageList1, listOfFiles);
+            fileTask1.start();
+            fileTask2.start();
+            while (fileTask1.getState() != Thread.State.TERMINATED || fileTask2.getState() != Thread.State.TERMINATED) {
             }
-        } catch (java.lang.NullPointerException e) {
-            System.err.println("Error no files found in Data directory");
+            mapImageList.addAll(mapImageList1);
+
+        } else {
+            mapImageList = new ArrayList<ArrayList<ImageView>>(listOfFiles.length);
+
+            FileQueue fileTask1 = new FileQueue(0, listOfFiles.length - 1, mapImageList, listOfFiles);
+            fileTask1.start();
+            while (fileTask1.getState() != Thread.State.TERMINATED) {
+            }
         }
+
     }
 
     @Override
@@ -113,7 +122,7 @@ public class MapPreloader extends Preloader {
         return Boolean.TRUE;
     }
 
-    private int toInt(Square s) {
+    private static int toInt(Square s) {
         int r, g, b, o;
         try {
             r = s.getMarkerList().get(0).getPercentage() * 255 / 100;
@@ -142,7 +151,7 @@ public class MapPreloader extends Preloader {
      * @param offset  - количество пикселей в одном квадрате
      * @return ImageView с картой всех квадратов
      */
-    public ImageView getMap(Squares squares, int offset) {
+    public static ImageView getMap(Squares squares, int offset) {
         WritableImage imageLayer = new WritableImage(w, h);
         PixelWriter p = imageLayer.getPixelWriter();
         int colorCode;

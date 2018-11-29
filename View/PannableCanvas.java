@@ -18,6 +18,7 @@ public class PannableCanvas extends Pane {
     private int height = 1024 * 2;
     private ArrayList<ArrayList<ImageView>> mapImageList;
 
+
     public PannableCanvas(ArrayList<ArrayList<ImageView>> mapImageList) {
         this.mapImageList = mapImageList;
         setPrefSize(width, height);
