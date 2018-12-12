@@ -66,10 +66,14 @@ public class Squares {
                 }
                 buf = new MeasModel(new Position(bufPos), bufArMar);
                 //Валидация маркера по карте
-                if (pixels[bufPos.getY() * width + bufPos.getX()] != 0xffffff && pixels[bufPos.getY() * width + bufPos.getX()] != 0x000000) {
-                    squares0[bufPos.getY() / 4][bufPos.getX() / 4].AddMeasModel(buf);
+                try {
+                    if (pixels[bufPos.getY() * width + bufPos.getX()] != 0xffffff && pixels[bufPos.getY() * width + bufPos.getX()] != 0x000000) {
+                        squares0[bufPos.getY() / 2][bufPos.getX() / 2].AddMeasModel(buf.getMarkerList());
+                    }
+                } catch (ArrayIndexOutOfBoundsException E) {
                 }
                 bufArMar = new ArrayList<Marker>(0);
+
 
             }
         } catch (IOException | ParseException e) {

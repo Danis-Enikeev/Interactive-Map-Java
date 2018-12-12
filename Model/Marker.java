@@ -1,12 +1,20 @@
 package Model;
 
-public class Marker {
+
+public class Marker implements Comparable<Marker> {
     private String Type;
     private int Percentage;
 
     public Marker(String type, int percentage) {
         this.Type = type;
         this.Percentage = percentage;
+    }
+
+    @Override
+    public int compareTo(Marker comparestu) {
+        int compareage = (comparestu).getPercentage();
+        return compareage - this.Percentage;
+
     }
 
     public Marker(String type) {

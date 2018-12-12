@@ -2,6 +2,7 @@ package View;
 
 import Controller.Config;
 import Controller.FileQueue;
+import Model.Marker;
 import Model.Square;
 import Model.Squares;
 import javafx.application.Preloader;
@@ -15,8 +16,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 
 public class MapPreloader extends Preloader {
@@ -28,7 +28,7 @@ public class MapPreloader extends Preloader {
     private Stage preloaderStage;
     private File[] listOfFiles;
     private ArrayList<ArrayList<ImageView>> mapImageList1;
-
+    public static HashMap<String, String> TypeColor = new HashMap<String, String>(0);
 
     public void setSquares() {
         File folder = new File("Data");
@@ -104,6 +104,10 @@ public class MapPreloader extends Preloader {
     }
 
     public Boolean mapCompute() {
+        TypeColor.put("white", "red");
+        TypeColor.put("black", "orange");
+        TypeColor.put("asian", "cyan");
+        TypeColor.put("other", "green");
         mapImageList = new ArrayList<>(0);
         if (Config.getSettings().get("Autotests").equals("0")) {
             setSquares();
@@ -123,25 +127,29 @@ public class MapPreloader extends Preloader {
     }
 
     private static int toInt(Square s) {
-        int r, g, b, o;
         try {
-            r = s.getMarkerList().get(0).getPercentage() * 255 / 100;
-        } catch (Exception e) {
-            r = 0;
+            Marker maxMarker = Collections.max(s.getMarkerList(), Comparator.comparing(m -> m.getPercentage()));
+            // Marker maxMarker = Collections.max(s.getMarkerList());
+
+            String color = TypeColor.get(maxMarker.getType());
+            switch (color) {
+                case "red":
+                    return (255 * maxMarker.getPercentage() / 100 << 24) | ((int) (255 * Color.RED.getRed())) << 16 | ((int) (255 * Color.RED.getGreen())) << 8 | (int) (255 * Color.RED.getBlue());
+                case "orange":
+                    return (255 * maxMarker.getPercentage() / 100 << 24) | ((int) (255 * Color.ORANGE.getRed())) << 16 | ((int) (255 * Color.ORANGE.getGreen())) << 8 | (int) (255 * Color.ORANGE.getBlue());
+                case "cyan":
+                    return (255 * maxMarker.getPercentage() / 100 << 24) | ((int) (255 * Color.CYAN.getRed())) << 16 | ((int) (255 * Color.CYAN.getGreen())) << 8 | (int) (255 * Color.CYAN.getBlue());
+                case "green":
+                    return (255 * maxMarker.getPercentage() / 100 << 24) | ((int) (255 * Color.GREEN.getRed())) << 16 | ((int) (255 * Color.GREEN.getGreen())) << 8 | (int) (255 * Color.GREEN.getBlue());
+                default:
+                    return (255 * maxMarker.getPercentage() / 100 << 24) | ((int) (255 * Color.GREEN.getRed())) << 16 | ((int) (255 * Color.GREEN.getGreen())) << 8 | (int) (255 * Color.GREEN.getBlue());
+
+            }
+        } catch (NoSuchElementException E) {
+            return (0 << 24) | ((int) Color.GREEN.getRed()) << 16 | ((int) Color.GREEN.getGreen()) << 8 | (int) Color.GREEN.getBlue();
         }
-        try {
-            g = s.getMarkerList().get(1).getPercentage() * 255 / 100;
-        } catch (Exception e) {
-            g = 0;
-        }
-        try {
-            b = s.getMarkerList().get(3).getPercentage() * 255 / 100;
-        } catch (Exception e) {
-            b = 0;
-        }
-        o = r + g + b;
-        return
-                (o << 24) | (r << 16) | (g << 8) | b;
+
+
     }
 
     /**
