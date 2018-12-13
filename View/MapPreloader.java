@@ -15,6 +15,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.nio.IntBuffer;
 import java.util.*;
 
@@ -24,6 +27,7 @@ public class MapPreloader extends Preloader {
     private static final WritablePixelFormat<IntBuffer> pixelFormat = PixelFormat.getIntArgbPreInstance();
     private static int w = 1024 * 4;
     private static int h = 1024 * 2;
+    public static String fileDir = "Data";
     private ArrayList<ArrayList<ImageView>> mapImageList;
     private Stage preloaderStage;
     private File[] listOfFiles;
@@ -31,7 +35,7 @@ public class MapPreloader extends Preloader {
     public static HashMap<String, String> TypeColor = new HashMap<String, String>(0);
 
     public void setSquares() {
-        File folder = new File("Data");
+        File folder = new File(fileDir);
         listOfFiles = folder.listFiles();
 
         if (listOfFiles.length >= 2) {
@@ -74,8 +78,12 @@ public class MapPreloader extends Preloader {
         Task<Boolean> task = new Task<Boolean>() {
             @Override
             public Boolean call() {
-
-                Boolean result = mapCompute();
+                Boolean result;
+                if (Config.getSettings().get("Storage").equals("File")) {
+                    result = mapCompute();
+                } else {
+                    result = mapDownload();
+                }
                 return result;
             }
         };
@@ -101,6 +109,29 @@ public class MapPreloader extends Preloader {
                         ((int) (c.getRed() * 255) << 16) |
                         ((int) (c.getGreen() * 255) << 8) |
                         ((int) (c.getBlue() * 255));
+    }
+
+    public Boolean mapDownload() {
+        try {
+
+            Socket socketConnection = new Socket("127.0.0.1", 11111);
+
+
+            ObjectOutputStream clientOutputStream = new
+                    ObjectOutputStream(socketConnection.getOutputStream());
+            ObjectInputStream clientInputStream = new
+                    ObjectInputStream(socketConnection.getInputStream());
+
+            clientOutputStream.writeObject(mapImageList);
+
+            mapImageList = (ArrayList<ArrayList<ImageView>>) clientInputStream.readObject();
+            clientOutputStream.close();
+            clientInputStream.close();
+
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+        return Boolean.TRUE;
     }
 
     public Boolean mapCompute() {

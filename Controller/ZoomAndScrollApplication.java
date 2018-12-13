@@ -25,7 +25,6 @@ public class ZoomAndScrollApplication extends Application {
         GUIStage = stage;
         Config config = new Config("config");
         stage.setTitle("Login page");
-
         LoginScreen loginScreen = new LoginScreen(config);
         Scene scene = new Scene(loginScreen, 300, 275);
         stage.setScene(scene);

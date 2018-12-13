@@ -38,7 +38,6 @@ public class PannableCanvas extends Pane {
         getChildren().add(imageView);
 
         GridVal += resizeVal;
-
         getChildren().add(mapImageList.get(timeVal).get(3 + GridVal));
 
     }
