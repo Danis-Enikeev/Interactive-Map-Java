@@ -14,9 +14,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.nio.IntBuffer;
 import java.util.*;
@@ -27,7 +25,10 @@ public class MapPreloader extends Preloader {
     private static final WritablePixelFormat<IntBuffer> pixelFormat = PixelFormat.getIntArgbPreInstance();
     private static int w = 1024 * 4;
     private static int h = 1024 * 2;
+
     public static String fileDir = "Data";
+    public static String randDataDir = "/RandomData";
+    public static String infoFile = "/DataInfo.txt";
     private ArrayList<ArrayList<ImageView>> mapImageList;
     private Stage preloaderStage;
     private File[] listOfFiles;
@@ -35,7 +36,24 @@ public class MapPreloader extends Preloader {
     public static HashMap<String, String> TypeColor = new HashMap<String, String>(0);
 
     public void setSquares() {
-        File folder = new File(fileDir);
+        BufferedReader br;
+
+        try {
+            br = new BufferedReader(new FileReader(fileDir + infoFile));
+            String thisLine;
+            try {
+                while ((thisLine = br.readLine()) != null) {
+                    String[] stringArray = thisLine.split(":", 2);
+                    TypeColor.put(stringArray[0], stringArray[1]);
+                }
+                br.close();
+            } catch (Exception e) {
+                System.err.println("Error reading from the config file");
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Error: data info file not found");
+        }
+        File folder = new File(fileDir + randDataDir);
         listOfFiles = folder.listFiles();
 
         if (listOfFiles.length >= 2) {
@@ -135,10 +153,6 @@ public class MapPreloader extends Preloader {
     }
 
     public Boolean mapCompute() {
-        TypeColor.put("white", "red");
-        TypeColor.put("black", "orange");
-        TypeColor.put("asian", "cyan");
-        TypeColor.put("other", "green");
         mapImageList = new ArrayList<>(0);
         if (Config.getSettings().get("Autotests").equals("0")) {
             setSquares();
@@ -172,12 +186,18 @@ public class MapPreloader extends Preloader {
                     return (255 * maxMarker.getPercentage() / 100 << 24) | ((int) (255 * Color.CYAN.getRed())) << 16 | ((int) (255 * Color.CYAN.getGreen())) << 8 | (int) (255 * Color.CYAN.getBlue());
                 case "green":
                     return (255 * maxMarker.getPercentage() / 100 << 24) | ((int) (255 * Color.GREEN.getRed())) << 16 | ((int) (255 * Color.GREEN.getGreen())) << 8 | (int) (255 * Color.GREEN.getBlue());
+                case "blue":
+                    return (255 * maxMarker.getPercentage() / 100 << 24) | ((int) (255 * Color.BLUE.getRed())) << 16 | ((int) (255 * Color.BLUE.getGreen())) << 8 | (int) (255 * Color.BLUE.getBlue());
+                case "yellow":
+                    return (255 * maxMarker.getPercentage() / 100 << 24) | ((int) (255 * Color.YELLOW.getRed())) << 16 | ((int) (255 * Color.YELLOW.getGreen())) << 8 | (int) (255 * Color.YELLOW.getBlue());
+                case "violet":
+                    return (255 * maxMarker.getPercentage() / 100 << 24) | ((int) (255 * Color.VIOLET.getRed())) << 16 | ((int) (255 * Color.VIOLET.getGreen())) << 8 | (int) (255 * Color.VIOLET.getBlue());
                 default:
-                    return (255 * maxMarker.getPercentage() / 100 << 24) | ((int) (255 * Color.GREEN.getRed())) << 16 | ((int) (255 * Color.GREEN.getGreen())) << 8 | (int) (255 * Color.GREEN.getBlue());
+                    return 0 << 24 | 0 << 16 | 0 << 8 | 0;
 
             }
         } catch (NoSuchElementException E) {
-            return (0 << 24) | ((int) Color.GREEN.getRed()) << 16 | ((int) Color.GREEN.getGreen()) << 8 | (int) Color.GREEN.getBlue();
+            return 0 << 24 | 0 << 16 | 0 << 8 | 0;
         }
 
 

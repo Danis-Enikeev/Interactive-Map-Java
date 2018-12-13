@@ -1,0 +1,7 @@
+white:red
+black:green
+asian:blue
+other:orange
+marker5:yellow
+marker6:cyan
+marker7:violet
