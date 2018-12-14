@@ -173,10 +173,23 @@ public class MapPreloader extends Preloader {
 
     private static int toInt(Square s) {
         try {
-            Marker maxMarker = Collections.max(s.getMarkerList(), Comparator.comparing(m -> m.getPercentage()));
+            Marker maxMarker;
             // Marker maxMarker = Collections.max(s.getMarkerList());
-
-            String color = TypeColor.get(maxMarker.getType());
+            String color;
+            while (true) {
+                maxMarker = Collections.max(s.getMarkerList(), Comparator.comparing(m -> m.getPercentage()));
+                color = TypeColor.get(maxMarker.getType());
+                if (color.equals("none")) {
+                    if (s.getMarkerList().size() > 1) {
+                        s.deleteMarker(maxMarker.getType());
+                    } else {
+                        color = "none";
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
             switch (color) {
                 case "red":
                     return (255 * maxMarker.getPercentage() / 100 << 24) | ((int) (255 * Color.RED.getRed())) << 16 | ((int) (255 * Color.RED.getGreen())) << 8 | (int) (255 * Color.RED.getBlue());
@@ -191,7 +204,7 @@ public class MapPreloader extends Preloader {
                 case "yellow":
                     return (255 * maxMarker.getPercentage() / 100 << 24) | ((int) (255 * Color.YELLOW.getRed())) << 16 | ((int) (255 * Color.YELLOW.getGreen())) << 8 | (int) (255 * Color.YELLOW.getBlue());
                 case "violet":
-                    return (255 * maxMarker.getPercentage() / 100 << 24) | ((int) (255 * Color.VIOLET.getRed())) << 16 | ((int) (255 * Color.VIOLET.getGreen())) << 8 | (int) (255 * Color.VIOLET.getBlue());
+                    return (255 * maxMarker.getPercentage() / 100 << 24) | ((int) (255 * Color.DARKMAGENTA.getRed())) << 16 | ((int) (255 * Color.DARKMAGENTA.getGreen())) << 8 | (int) (255 * Color.DARKMAGENTA.getBlue());
                 default:
                     return 0 << 24 | 0 << 16 | 0 << 8 | 0;
 

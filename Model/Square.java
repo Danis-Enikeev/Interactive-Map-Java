@@ -102,6 +102,7 @@ public class Square {
         }
     }
 
+
     public Position getLeftUp() {
         return LeftUp;
     }
@@ -122,6 +123,14 @@ public class Square {
         return MarkerList;
     }
 
+    public void deleteMarker(String Type) {
+        for (int i = 0; i < this.MarkerList.size(); i++) {
+            if (MarkerList.get(i).getType().equals(Type)) {
+                MarkerList.remove(i);
+            }
+        }
+
+    }
     public void setMarkerList(ArrayList<Marker> markerList) {
         MarkerList = markerList;
     }

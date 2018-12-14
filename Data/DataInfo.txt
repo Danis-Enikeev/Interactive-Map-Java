@@ -1,4 +1,5 @@
-black:green
-asian:red
-other:none
-white:none
+category2:red
+category3:green
+category4:violet
+category5:yellow
+category1:orange
