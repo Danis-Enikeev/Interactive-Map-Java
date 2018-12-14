@@ -26,7 +26,7 @@ public class SceneGestures {
     private EventHandler<MouseEvent> onMouseDraggedEventHandler = new EventHandler<MouseEvent>() {
         public void handle(MouseEvent event) {
 
-            if (event.getSceneX() > 150 || event.getSceneY() < 50 || event.getSceneY() > 100) {
+            if (event.getSceneX() > 150 || event.getSceneY() > 500) {
                 canvas.setTranslateX(sceneDragContext.translateAnchorX + event.getSceneX() - sceneDragContext.mouseAnchorX);
                 canvas.setTranslateY(sceneDragContext.translateAnchorY + event.getSceneY() - sceneDragContext.mouseAnchorY);
 

@@ -158,7 +158,7 @@ public class MapPreloader extends Preloader {
             setSquares();
         } else {
             int offset = 2;
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 4; i++) {
                 ArrayList<ImageView> mapImageListBuff = new ArrayList<>(0);
 
                 for (int j = offset; j <= 32; j *= 2) {
@@ -181,7 +181,7 @@ public class MapPreloader extends Preloader {
                 case "red":
                     return (255 * maxMarker.getPercentage() / 100 << 24) | ((int) (255 * Color.RED.getRed())) << 16 | ((int) (255 * Color.RED.getGreen())) << 8 | (int) (255 * Color.RED.getBlue());
                 case "orange":
-                    return (255 * maxMarker.getPercentage() / 100 << 24) | ((int) (255 * Color.ORANGE.getRed())) << 16 | ((int) (255 * Color.ORANGE.getGreen())) << 8 | (int) (255 * Color.ORANGE.getBlue());
+                    return (255 * maxMarker.getPercentage() / 100 << 24) | ((int) (255 * Color.SANDYBROWN.getRed())) << 16 | ((int) (255 * Color.SANDYBROWN.getGreen())) << 8 | (int) (255 * Color.SANDYBROWN.getBlue());
                 case "cyan":
                     return (255 * maxMarker.getPercentage() / 100 << 24) | ((int) (255 * Color.CYAN.getRed())) << 16 | ((int) (255 * Color.CYAN.getGreen())) << 8 | (int) (255 * Color.CYAN.getBlue());
                 case "green":
